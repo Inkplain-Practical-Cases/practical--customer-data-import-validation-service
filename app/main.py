@@ -23,3 +23,13 @@ def import_customers(request: ImportRequest):
     accepted, rejected = validate_rows(rows)
     saved = save_customers(accepted, DB_PATH)
     return {"total": len(rows), "accepted": saved, "rejected": len(rejected), "errors": rejected}
+
+
+class LegacyRequest(BaseModel):
+    message: str = Field(min_length=1, max_length=2000)
+
+@app.post("/process", deprecated=True)
+def legacy_process(request: LegacyRequest):
+    """Keep the original starter exercise endpoint without changing /import."""
+    payload = ImportRequest(format="csv", data=request.message)
+    return import_customers(payload)
