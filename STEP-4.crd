@@ -1,7 +1,7 @@
 {
   "crd_version": 1,
   "name": "customer-data-import-validation-service STEP-4",
-  "description": "Persist accepted customer records",
+  "description": "Cumulative customer import API at STEP-4; legacy /process remains for existing learning exercises.",
   "source": {
     "repo": "https://github.com/Inkplain-Practical-Cases/practical--customer-data-import-validation-service",
     "revision": "step-04-persist-accepted-customer-records",
@@ -22,9 +22,14 @@
   },
   "flows": [
     {
-      "id": "request",
-      "name": "Synthetic request",
+      "id": "legacy",
+      "name": "Legacy educational endpoint",
       "entry": "be.process"
+    },
+    {
+      "id": "import",
+      "name": "CSV JSON customer import",
+      "entry": "be.import_customers"
     }
   ],
   "components": [
@@ -34,76 +39,229 @@
       "kind": "function",
       "side": "backend",
       "layer": "door",
+      "description": "Existing /process teaching endpoint retained for backward compatibility",
       "step_change": "changed",
       "source": {
         "file": "app/main.py",
         "symbol": "process"
       },
-      "operations": [
-        {
-          "id": "op-2",
-          "title": "Call step 2",
-          "calls": {
-            "to": "be.step_2",
-            "type": "call"
-          }
-        },
-        {
-          "id": "op-3",
-          "title": "Call step 3",
-          "calls": {
-            "to": "be.step_3",
-            "type": "call"
-          }
-        },
-        {
-          "id": "op-4",
-          "title": "Call step 4",
-          "calls": {
-            "to": "be.step_4",
-            "type": "call"
-          }
-        }
-      ]
+      "inputs": [],
+      "validations": [],
+      "operations": [],
+      "outputs": [],
+      "attributes": {
+        "step_note": "Existing /process teaching endpoint retained for backward compatibility"
+      }
     },
     {
-      "id": "be.step_2",
-      "name": "transform_2",
+      "id": "be.transform_2",
+      "name": "transform",
       "kind": "function",
       "side": "backend",
       "layer": "service",
+      "description": "Legacy step 2 text transformation for early teaching tests",
       "step_change": "unchanged",
       "source": {
         "file": "app/features/step_2.py",
         "symbol": "transform"
       },
-      "operations": []
+      "inputs": [],
+      "validations": [],
+      "operations": [],
+      "outputs": [],
+      "attributes": {
+        "step_note": "Legacy step 2 text transformation for early teaching tests"
+      }
     },
     {
-      "id": "be.step_3",
-      "name": "transform_3",
+      "id": "be.transform_3",
+      "name": "transform",
       "kind": "function",
       "side": "backend",
       "layer": "service",
+      "description": "Legacy step 3 text transformation for early teaching tests",
       "step_change": "unchanged",
       "source": {
         "file": "app/features/step_3.py",
         "symbol": "transform"
       },
-      "operations": []
+      "inputs": [],
+      "validations": [],
+      "operations": [],
+      "outputs": [],
+      "attributes": {
+        "step_note": "Legacy step 3 text transformation for early teaching tests"
+      }
     },
     {
-      "id": "be.step_4",
-      "name": "transform_4",
+      "id": "be.transform_4",
+      "name": "transform",
       "kind": "function",
       "side": "backend",
       "layer": "service",
+      "description": "Legacy step 4 text transformation for early teaching tests",
       "step_change": "added",
       "source": {
         "file": "app/features/step_4.py",
         "symbol": "transform"
       },
-      "operations": []
+      "inputs": [],
+      "validations": [],
+      "operations": [],
+      "outputs": [],
+      "attributes": {
+        "step_note": "Legacy step 4 text transformation for early teaching tests"
+      }
+    },
+    {
+      "id": "be.import_customers",
+      "name": "import_customers",
+      "kind": "function",
+      "side": "backend",
+      "layer": "door",
+      "description": "HTTP /import endpoint: write accepted customers to SQLite",
+      "step_change": "changed",
+      "source": {
+        "file": "app/main.py",
+        "symbol": "import_customers"
+      },
+      "inputs": [],
+      "validations": [],
+      "operations": [
+        {
+          "id": "op-1",
+          "title": "Call parse_rows",
+          "description": "Invoke be.parse_rows in the customer import flow",
+          "show": true,
+          "calls": {
+            "to": "be.parse_rows",
+            "type": "call",
+            "label": "invokes",
+            "evidence": "app/main.py"
+          }
+        },
+        {
+          "id": "op-2",
+          "title": "Call validate_rows",
+          "description": "Invoke be.validate_rows in the customer import flow",
+          "show": true,
+          "calls": {
+            "to": "be.validate_rows",
+            "type": "call",
+            "label": "invokes",
+            "evidence": "app/main.py"
+          }
+        },
+        {
+          "id": "op-3",
+          "title": "Call save_customers",
+          "description": "Invoke be.save_customers in the customer import flow",
+          "show": true,
+          "calls": {
+            "to": "be.save_customers",
+            "type": "call",
+            "label": "invokes",
+            "evidence": "app/main.py"
+          }
+        }
+      ],
+      "outputs": [],
+      "attributes": {
+        "step_note": "HTTP /import endpoint: write accepted customers to SQLite"
+      }
+    },
+    {
+      "id": "be.parse_rows",
+      "name": "parse_rows",
+      "kind": "function",
+      "side": "backend",
+      "layer": "service",
+      "description": "Decode CSV DictReader or JSON customer records",
+      "step_change": "unchanged",
+      "source": {
+        "file": "app/import_pipeline.py",
+        "symbol": "parse_rows"
+      },
+      "inputs": [],
+      "validations": [],
+      "operations": [],
+      "outputs": [],
+      "attributes": {
+        "step_note": "Decode CSV DictReader or JSON customer records"
+      }
+    },
+    {
+      "id": "be.validate_rows",
+      "name": "validate_rows",
+      "kind": "function",
+      "side": "backend",
+      "layer": "service",
+      "description": "Normalize and deduplicate customer emails",
+      "step_change": "unchanged",
+      "source": {
+        "file": "app/customer_validation.py",
+        "symbol": "validate_rows"
+      },
+      "inputs": [],
+      "validations": [],
+      "operations": [
+        {
+          "id": "op-1",
+          "title": "Call normalize_email",
+          "description": "Invoke be.normalize_email in the customer import flow",
+          "show": true,
+          "calls": {
+            "to": "be.normalize_email",
+            "type": "call",
+            "label": "invokes",
+            "evidence": "app/customer_validation.py"
+          }
+        }
+      ],
+      "outputs": [],
+      "attributes": {
+        "step_note": "Normalize and deduplicate customer emails"
+      }
+    },
+    {
+      "id": "be.normalize_email",
+      "name": "normalize_email",
+      "kind": "function",
+      "side": "backend",
+      "layer": "service",
+      "description": "Normalize case and whitespace around customer email",
+      "step_change": "unchanged",
+      "source": {
+        "file": "app/customer_validation.py",
+        "symbol": "normalize_email"
+      },
+      "inputs": [],
+      "validations": [],
+      "operations": [],
+      "outputs": [],
+      "attributes": {
+        "step_note": "Normalize case and whitespace around customer email"
+      }
+    },
+    {
+      "id": "be.save_customers",
+      "name": "save_customers",
+      "kind": "function",
+      "side": "backend",
+      "layer": "service",
+      "description": "Commit idempotent SQLite upserts keyed by normalized email",
+      "step_change": "added",
+      "source": {
+        "file": "app/customer_storage.py",
+        "symbol": "save_customers"
+      },
+      "inputs": [],
+      "validations": [],
+      "operations": [],
+      "outputs": [],
+      "attributes": {
+        "step_note": "Commit idempotent SQLite upserts keyed by normalized email"
+      }
     }
   ]
 }
