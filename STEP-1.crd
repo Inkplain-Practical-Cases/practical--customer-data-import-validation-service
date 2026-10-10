@@ -1,7 +1,7 @@
 {
   "crd_version": 1,
-  "name": "customer data import validation service STEP-1",
-  "description": "Validated request entry and one local response service",
+  "name": "customer-data-import-validation-service STEP-1",
+  "description": "Cumulative customer import API at STEP-1; legacy /process remains for existing learning exercises.",
   "source": {
     "repo": "https://github.com/Inkplain-Practical-Cases/practical--customer-data-import-validation-service",
     "revision": "step-01-accept-customer-data-upload",
@@ -22,9 +22,14 @@
   },
   "flows": [
     {
-      "id": "request",
-      "name": "Receive synthetic request",
+      "id": "legacy",
+      "name": "Legacy educational endpoint",
       "entry": "be.process"
+    },
+    {
+      "id": "import",
+      "name": "CSV JSON customer import",
+      "entry": "be.import_customers"
     }
   ],
   "components": [
@@ -34,46 +39,72 @@
       "kind": "function",
       "side": "backend",
       "layer": "door",
-      "description": "Validate incoming payload and pass message to local handler",
-      "flows": [
-        "request"
-      ],
+      "description": "Existing /process teaching endpoint retained for backward compatibility",
       "step_change": "added",
       "source": {
         "file": "app/main.py",
-        "symbol": "process",
-        "start_line": 20,
-        "end_line": 23
+        "symbol": "process"
       },
-      "operations": [
-        {
-          "id": "call-handler",
-          "title": "Call handle_request",
-          "calls": {
-            "to": "be.handle_request",
-            "type": "call"
-          }
-        }
-      ]
+      "inputs": [],
+      "validations": [],
+      "operations": [],
+      "outputs": [],
+      "attributes": {
+        "step_note": "Existing /process teaching endpoint retained for backward compatibility"
+      }
     },
     {
-      "id": "be.handle_request",
-      "name": "handle_request",
+      "id": "be.import_customers",
+      "name": "import_customers",
       "kind": "function",
       "side": "backend",
-      "layer": "handler",
-      "description": "Accept a synthetic message without external dependencies",
-      "flows": [
-        "request"
-      ],
+      "layer": "door",
+      "description": "HTTP /import endpoint: accept and parse CSV/JSON",
       "step_change": "added",
       "source": {
         "file": "app/main.py",
-        "symbol": "handle_request",
-        "start_line": 15,
-        "end_line": 18
+        "symbol": "import_customers"
       },
-      "operations": []
+      "inputs": [],
+      "validations": [],
+      "operations": [
+        {
+          "id": "op-1",
+          "title": "Call parse_rows",
+          "description": "Invoke be.parse_rows in the customer import flow",
+          "show": true,
+          "calls": {
+            "to": "be.parse_rows",
+            "type": "call",
+            "label": "invokes",
+            "evidence": "app/main.py"
+          }
+        }
+      ],
+      "outputs": [],
+      "attributes": {
+        "step_note": "HTTP /import endpoint: accept and parse CSV/JSON"
+      }
+    },
+    {
+      "id": "be.parse_rows",
+      "name": "parse_rows",
+      "kind": "function",
+      "side": "backend",
+      "layer": "service",
+      "description": "Decode CSV DictReader or JSON customer records",
+      "step_change": "added",
+      "source": {
+        "file": "app/import_pipeline.py",
+        "symbol": "parse_rows"
+      },
+      "inputs": [],
+      "validations": [],
+      "operations": [],
+      "outputs": [],
+      "attributes": {
+        "step_note": "Decode CSV DictReader or JSON customer records"
+      }
     }
   ]
 }
