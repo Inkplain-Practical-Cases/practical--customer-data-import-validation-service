@@ -16,3 +16,18 @@ def process(request:Request)->dict[str,str]:
         return {"status":"accepted","result":value}
     except ValueError as exc:
         raise HTTPException(status_code=422,detail=str(exc)) from exc
+
+from app.import_pipeline import parse_rows
+from app.customer_validation import validate_rows
+class ImportRequest(BaseModel):
+    format: str = Field(pattern="^(csv|json)$")
+    data: str = Field(min_length=1, max_length=1000000)
+
+@app.post("/import")
+def import_customers(request:ImportRequest):
+    try:
+        rows=parse_rows(request.format,request.data)
+    except (ValueError, TypeError) as exc:
+        raise HTTPException(status_code=422,detail="invalid customer rows") from exc
+    accepted,rejected=validate_rows(rows)
+    return {"total":len(rows),"accepted":len(accepted),"rejected":len(rejected),"errors":rejected}
