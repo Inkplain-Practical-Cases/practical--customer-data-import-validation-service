@@ -1,4 +1,5 @@
-from app.customer_validation import normalize_email
+def normalize_email(email: str) -> str:
+    return email.strip().lower()
 
 def validate_rows(rows):
     accepted, rejected, seen = [], [], set()
