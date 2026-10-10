@@ -32,4 +32,5 @@ class LegacyRequest(BaseModel):
 def legacy_process(request: LegacyRequest):
     """Keep the original starter exercise endpoint without changing /import."""
     payload = ImportRequest(format="csv", data=request.message)
-    return import_customers(payload)
+    report = import_customers(payload)
+    return {"status": "accepted", **report}
