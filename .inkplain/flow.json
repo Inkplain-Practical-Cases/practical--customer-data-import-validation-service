@@ -74,7 +74,7 @@
     },
     "content": {
       "status": "done",
-      "summary": "Completed and MCP-readback verified all 30 portal lessons in 7 categories: Overview 7, five STEP categories with System design, Components & 4M, source-linked walkthrough, and Run & check (20), Conclusion 3. Verified 5 INKP diagrams have zero missing linked documents; content references updated CSV/JSON import implementation and STEP CRDs.",
+      "summary": "Created separate Database (Entity) Relations item in STEP-4 and STEP-5, second in sidebar, with ERD visualization, SQLite fields and source links.",
       "outputs": {
         "categories": 7,
         "items": 30,
@@ -86,12 +86,19 @@
         "portal_url": "/practical-case/customer-data-import-validation-service",
         "content_qa": true,
         "inkp_tabs": 5,
-        "inkp_missing_links": 0
+        "inkp_missing_links": 0,
+        "erd_lessons_created": 2,
+        "erd_visualizations": [
+          "STEP-4-ERD",
+          "STEP-5-ERD"
+        ],
+        "erd_item_title": "Database (Entity) Relations",
+        "content_verified": true
       },
       "started_at": "2026-10-10T15:47:51.649Z",
       "finished_at": "2026-10-10T16:54:09.690Z",
       "updated_by": "api-key:for-chatgpt-test-2"
     }
   },
-  "updated_at": "2026-10-13T11:39:40.919Z"
+  "updated_at": "2026-10-13T11:39:47.137Z"
 }
