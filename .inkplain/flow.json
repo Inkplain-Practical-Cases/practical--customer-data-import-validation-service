@@ -55,12 +55,18 @@
     },
     "inkp": {
       "status": "done",
-      "summary": "Five-tab .inkp created on final main, each STEP tab linked to its source-derived executor component docs; get_inkp_summary confirms exactly STEP-1..STEP-5 and zero missing linked executor documents. Repo stage remains in progress separately for ancestry/CI.",
+      "summary": "Source-derived SQLite customers entity ERDs embedded for STEP-4/5, five flow tabs retained, total seven tabs.",
       "outputs": {
         "inkp_path": "customer-data-import-validation-service.inkp",
         "inkp_url": "https://github.com/Inkplain-Practical-Cases/practical--customer-data-import-validation-service/blob/main/customer-data-import-validation-service.inkp",
-        "tabs": 5,
-        "missing_links": 0
+        "tabs": 7,
+        "missing_links": 0,
+        "erd_tabs": [
+          "STEP-4-ERD",
+          "STEP-5-ERD"
+        ],
+        "erd_entities": 1,
+        "erd_relations": 0
       },
       "started_at": "2026-10-10T15:05:13.392Z",
       "finished_at": "2026-10-10T15:05:13.392Z",
@@ -87,5 +93,5 @@
       "updated_by": "api-key:for-chatgpt-test-2"
     }
   },
-  "updated_at": "2026-10-10T16:54:09.690Z"
+  "updated_at": "2026-10-13T11:39:40.919Z"
 }
