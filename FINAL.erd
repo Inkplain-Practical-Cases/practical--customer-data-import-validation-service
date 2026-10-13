@@ -1,0 +1,34 @@
+{
+  "erd_version": 1,
+  "name": "customer-data-import-validation-service",
+  "engine": "sqlite",
+  "generated_from": [
+    "app/customer_storage.py",
+    "app/main.py"
+  ],
+  "entities": [
+    {
+      "name": "customers",
+      "kind": "table",
+      "source": "app/customer_storage.py: save_customers() / CREATE TABLE customers",
+      "description": "Persisted imported customer records, uniquely identified by email; later imports update the name for an existing email.",
+      "fields": [
+        {
+          "name": "email",
+          "type": "TEXT",
+          "key": "PK",
+          "description": "Primary identifier for a customer, used as upsert conflict key."
+        },
+        {
+          "name": "name",
+          "type": "TEXT",
+          "nullable": false,
+          "description": "Validated customer name updated on conflict."
+        }
+      ],
+      "step_change": "unchanged"
+    }
+  ],
+  "relations": [],
+  "step": "final"
+}
